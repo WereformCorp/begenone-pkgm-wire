@@ -1,5 +1,9 @@
 {
   "name": "@begenone/pkgm-wire",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "react": "19.1.1",
+    "react-native": "^0.81.4"
+  }
 }
