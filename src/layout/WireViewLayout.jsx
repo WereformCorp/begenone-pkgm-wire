@@ -12,7 +12,6 @@ export function WireViewLayout({
   timeAgo,
   viewsText,
 }) {
-  const limit = 6;
   const contentText =
     content ??
     `Curiosity is the real engine of progress. You don’t need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
@@ -33,6 +32,11 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
       <View style={WireViewLayoutStyles.secondaryContainer}>
         <MenuChannelMeta
           containerStyles={{ marginTop: 0, paddingBottom: 12 }}
+          channelLogo={channelLogo}
+          userName={userName}
+          subscribersCount={subscribersCount}
+          timeAgo={timeAgo}
+          viewsText={viewsText}
         />
         <View>
           <Text style={WireViewLayoutStyles.mainText}>
