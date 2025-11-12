@@ -41,7 +41,7 @@ export function WireChannelMetadata({
             {timeAgo || "14 Hours Ago"}
           </Text>
           <View style={WireChannelMetadataStyles.dateIcon}>
-            <Ionicons name="calendar-clear-outline" size={16} color="white" />
+            <Ionicons name="calendar" size={16} color="white" />
           </View>
         </View>
         <View style={WireChannelMetadataStyles.viewsContainer}>
