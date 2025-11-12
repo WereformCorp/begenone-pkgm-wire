@@ -2,8 +2,16 @@
   "name": "@begenone/pkgm-wire",
   "version": "1.0.0",
   "private": true,
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "@expo/vector-icons": "*"
+  },
   "dependencies": {
-    "react": "19.1.1",
-    "react-native": "^0.81.4"
+    "@begenone/pkgm-channel": "workspace:*",
+    "@begenone/pkgm-settings": "workspace:*",
+    "@begenone/pkgm-shared": "workspace:*",
+    "@begenone/pkgm-video": "workspace:*",
+    "@begenone/pkgm-wire": "workspace:*"
   }
 }
