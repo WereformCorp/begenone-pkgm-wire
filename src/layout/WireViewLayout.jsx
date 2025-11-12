@@ -28,7 +28,10 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
     : [];
 
   return (
-    <ScrollView style={WireViewLayoutStyles.container}>
+    <ScrollView
+      style={WireViewLayoutStyles.container}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <View style={WireViewLayoutStyles.secondaryContainer}>
         <MenuChannelMeta
           containerStyles={{ marginTop: 0, paddingBottom: 12 }}
