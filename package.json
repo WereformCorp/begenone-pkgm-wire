@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "peerDependencies": {
+    "@expo/vector-icons": "*",
     "react": "*",
-    "react-native": "*",
-    "@expo/vector-icons": "*"
+    "react-native": "*"
   },
   "dependencies": {
     "@begenone/pkgm-channel": "workspace:*",
     "@begenone/pkgm-settings": "workspace:*",
     "@begenone/pkgm-shared": "workspace:*",
     "@begenone/pkgm-video": "workspace:*",
-    "@begenone/pkgm-wire": "workspace:*"
+    "@begenone/pkgm-wire": "workspace:*",
+    "expo-image-picker": "^17.0.8",
+    "expo-video-thumbnails": "^10.0.7"
   }
 }

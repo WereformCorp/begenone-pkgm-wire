@@ -10,6 +10,7 @@ export const globalStyles = {
     colorPrimary350: "rgba(60,60,60,.2)",
 
     colorPrimary400: "#7F7F7F",
+    colorPrimary450: "rgba(127, 127, 127, .3)",
 
     colorPrimary500: "#D3D3D3",
 
