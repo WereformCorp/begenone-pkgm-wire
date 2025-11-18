@@ -15,7 +15,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { WireUploadStyles } from "../styles/WireUploadStyles";
 import { CustomizedButton, DropDown, InputField } from "@begenone/pkgm-shared";
 
-export function WireUploadLayout({ profilePic, userName }) {
+export function WireUploadLayout({
+  profilePic,
+  userName,
+  onPressVideoUploadScreen,
+}) {
   const [wireText, setWireText] = useState(``);
   const [media, setMedia] = useState(null); // image/video URI
   const [thumbnails, setThumbnails] = useState([]);
@@ -96,7 +100,11 @@ export function WireUploadLayout({ profilePic, userName }) {
         {/* 1 — Composer Input */}
         <View style={WireUploadStyles.wireInputContainer}>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
             <Text
               style={{
@@ -110,19 +118,21 @@ export function WireUploadLayout({ profilePic, userName }) {
             >
               Create <Text style={{ color: "#ff6000" }}>Wire</Text>
             </Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: "500",
-                fontSize: 14,
-                paddingBottom: 12,
-                // flexGrow: 1,
+            <TouchableOpacity onPress={onPressVideoUploadScreen}>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "500",
+                  fontSize: 14,
+                  paddingBottom: 12,
+                  // flexGrow: 1,
 
-                alignSelf: "center",
-              }}
-            >
-              Post a <Text style={{ color: "#ff6000" }}>Video</Text>
-            </Text>
+                  alignSelf: "center",
+                }}
+              >
+                Post a <Text style={{ color: "#ff6000" }}>Video</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={WireUploadStyles.wireInputTextContainer}>
             <InputField

@@ -4,7 +4,7 @@ import { globalStyles } from "./globalStyles";
 export const WireCardLayoutStyles = StyleSheet.create({
   container: {
     width: "auto",
-    height: 380,
+    minHeight: 300,
     justifyContent: "space-between",
     // aspectRatio: 1 / 1,
     margin: 12,
