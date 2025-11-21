@@ -62,6 +62,7 @@ export const WireChannelMetadataStyles = StyleSheet.create({
 
   nameSubcountContainer: {
     flexDirection: "column",
+    justifyContent: "center",
     paddingLeft: 12,
   },
 

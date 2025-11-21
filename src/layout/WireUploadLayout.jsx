@@ -19,10 +19,12 @@ export function WireUploadLayout({
   profilePic,
   userName,
   onPressVideoUploadScreen,
+  onPressWireUpload,
 }) {
   const [wireText, setWireText] = useState(``);
   const [media, setMedia] = useState(null); // image/video URI
   const [thumbnails, setThumbnails] = useState([]);
+  const [heading, setHeading] = useState("Default Heading!");
 
   const pickMedia = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -88,20 +90,20 @@ export function WireUploadLayout({
             </Text>
 
             {/* Link to user's public-facing channel page */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => Linking.openURL("https://begenone.com")}
             >
               <Text style={WireUploadStyles.channelSettingsText}>
                 View Channel
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         {/* 1 — Composer Input */}
         <View style={WireUploadStyles.wireInputContainer}>
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: "column",
               justifyContent: "space-between",
               alignItems: "center",
             }}
@@ -118,7 +120,9 @@ export function WireUploadLayout({
             >
               Create <Text style={{ color: "#ff6000" }}>Wire</Text>
             </Text>
-            <TouchableOpacity onPress={onPressVideoUploadScreen}>
+            <TouchableOpacity
+            // onPress={onPressVideoUploadScreen}
+            >
               <Text
                 style={{
                   color: "#fff",
@@ -130,7 +134,7 @@ export function WireUploadLayout({
                   alignSelf: "center",
                 }}
               >
-                Post a <Text style={{ color: "#ff6000" }}>Video</Text>
+                Currently, The Video upload is not available.
               </Text>
             </TouchableOpacity>
           </View>
@@ -158,7 +162,7 @@ export function WireUploadLayout({
             </View>
 
             {/* 3 — Upload Button */}
-            <View style={WireUploadStyles.uploadButtonContainer}>
+            {/* <View style={WireUploadStyles.uploadButtonContainer}>
               <TouchableOpacity style={WireUploadStyles.AIGenerateButton}>
                 <Ionicons name="sparkles-outline" size={24} color="#fff" />
               </TouchableOpacity>
@@ -168,10 +172,10 @@ export function WireUploadLayout({
               >
                 <Ionicons name="image" size={24} color="#fff" />
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
 
-          <DropDown
+          {/* <DropDown
             styles={{
               marginLeft: 0,
               marginRight: 0,
@@ -194,7 +198,7 @@ export function WireUploadLayout({
               { key: 1, label: "Turn — ON" },
               { key: 2, label: "Turn — OFF" },
             ]}
-          />
+          /> */}
         </View>
 
         <View
@@ -209,23 +213,24 @@ export function WireUploadLayout({
           }}
         >
           <CustomizedButton
-            label={"Post Video"}
+            label={"Post Wire"}
             style={{
               backgroundColor: "#ff6000",
               marginRight: 6,
             }}
             fontWeight={"900"}
             textColor={"#fff"}
+            onPress={() => onPressWireUpload(wireText, heading)}
           />
-          <CustomizedButton
+          {/* <CustomizedButton
             label={"Schedule"}
             style={{
-              backgroundColor: "#7f7f7f",
+              backgroundColor: "#202020",
               marginLeft: 6,
             }}
             fontWeight={"900"}
-            textColor={"#fff"}
-          />
+            textColor={"#404040"}
+          /> */}
         </View>
 
         {/* 4 — Future AI Row */}

@@ -1,7 +1,11 @@
 import { ScrollView, Text, View } from "react-native";
 import { WireChannelMetadata } from "../components/WireChannelMetadata";
 import { WireCardLayoutStyles } from "../styles/WireCardLayoutStyles";
-import { MenuInteraction, MenuChannelMeta } from "@begenone/pkgm-shared";
+import {
+  MenuInteraction,
+  MenuChannelMeta,
+  CustomizedButton,
+} from "@begenone/pkgm-shared";
 import { WireViewLayoutStyles } from "../styles/WireViewLayoutStyles";
 
 export function WireViewLayout({
@@ -11,6 +15,8 @@ export function WireViewLayout({
   subscribersCount,
   timeAgo,
   viewsText,
+  isItMe,
+  onPressDeleteButton,
 }) {
   const contentText =
     content ??
@@ -34,12 +40,17 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
     >
       <View style={WireViewLayoutStyles.secondaryContainer}>
         <MenuChannelMeta
-          containerStyles={{ marginTop: 0, paddingBottom: 12 }}
+          containerStyles={{
+            marginTop: 0,
+            paddingBottom: 12,
+            marginLeft: 0,
+            marginRight: 0,
+          }}
           channelLogo={channelLogo}
           userName={userName}
           subscribersCount={subscribersCount}
           timeAgo={timeAgo}
-          viewsText={viewsText}
+          // viewsText={viewsText}
         />
         <View>
           <Text style={WireViewLayoutStyles.mainText}>
@@ -57,7 +68,15 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
         </View>
       </View>
       <View>
-        <MenuInteraction />
+        {/* {isItMe && (
+          <CustomizedButton
+            label={"Delete"}
+            textColor={"white"}
+            style={{ backgroundColor: "red", marginTop: 12 }}
+            onPress={onPressDeleteButton}
+          />
+        )} */}
+        {/* <MenuInteraction /> */}
       </View>
     </ScrollView>
   );

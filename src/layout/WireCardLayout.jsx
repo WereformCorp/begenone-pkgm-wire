@@ -11,6 +11,7 @@ export function WireCardLayout({
   subscribersCount,
   timeAgo,
   viewsText,
+  onPress,
 }) {
   const limit = 8;
 
@@ -31,7 +32,7 @@ export function WireCardLayout({
     : [];
 
   return (
-    <View style={WireCardLayoutStyles.container}>
+    <TouchableOpacity style={WireCardLayoutStyles.container} onPress={onPress}>
       <View>
         <WireChannelMetadata
           channelLogo={
@@ -59,7 +60,7 @@ export function WireCardLayout({
           <Text style={WireCardLayoutStyles.seeMore}>See more →</Text>
         </View>
       </View>
-      <MenuInteraction containerStyles={{ marginBottom: 12 }} />
-    </View>
+      {/* <MenuInteraction containerStyles={{ marginBottom: 12 }} /> */}
+    </TouchableOpacity>
   );
 }

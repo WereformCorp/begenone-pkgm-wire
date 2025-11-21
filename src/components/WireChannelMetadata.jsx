@@ -25,12 +25,12 @@ export function WireChannelMetadata({
           <Text style={WireChannelMetadataStyles.userName}>
             {userName || "Default Username"}
           </Text>
-          <View style={WireChannelMetadataStyles.subCountContainer}>
+          {/* <View style={WireChannelMetadataStyles.subCountContainer}>
             <Text style={WireChannelMetadataStyles.subCount}>
               {subscribersCount || "0"}
             </Text>
             <Text style={WireChannelMetadataStyles.subText}>Subscribers</Text>
-          </View>
+          </View> */}
         </View>
       </View>
       <View
@@ -44,14 +44,14 @@ export function WireChannelMetadata({
             <Ionicons name="calendar" size={16} color="white" />
           </View>
         </View>
-        <View style={WireChannelMetadataStyles.viewsContainer}>
+        {/* <View style={WireChannelMetadataStyles.viewsContainer}>
           <Text style={WireChannelMetadataStyles.viewsText}>
-            {viewsText || "123,400"}
+            {viewsText || "0"}
           </Text>
           <View style={WireChannelMetadataStyles.eyeIcon}>
             <Ionicons name="eye-outline" size={16} color="white" />
           </View>
-        </View>
+        </View> */}
       </View>
     </View>
   );
