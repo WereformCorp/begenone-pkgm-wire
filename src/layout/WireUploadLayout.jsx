@@ -103,7 +103,7 @@ export function WireUploadLayout({
         <View style={WireUploadStyles.wireInputContainer}>
           <View
             style={{
-              flexDirection: "column",
+              flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
             }}
@@ -120,9 +120,7 @@ export function WireUploadLayout({
             >
               Create <Text style={{ color: "#ff6000" }}>Wire</Text>
             </Text>
-            <TouchableOpacity
-            // onPress={onPressVideoUploadScreen}
-            >
+            <TouchableOpacity onPress={onPressVideoUploadScreen}>
               <Text
                 style={{
                   color: "#fff",
@@ -134,7 +132,7 @@ export function WireUploadLayout({
                   alignSelf: "center",
                 }}
               >
-                Currently, The Video upload is not available.
+                Upload <Text style={{ color: "#ff6000" }}>Video</Text>
               </Text>
             </TouchableOpacity>
           </View>
@@ -162,7 +160,7 @@ export function WireUploadLayout({
             </View>
 
             {/* 3 — Upload Button */}
-            {/* <View style={WireUploadStyles.uploadButtonContainer}>
+            <View style={WireUploadStyles.uploadButtonContainer}>
               <TouchableOpacity style={WireUploadStyles.AIGenerateButton}>
                 <Ionicons name="sparkles-outline" size={24} color="#fff" />
               </TouchableOpacity>
@@ -172,10 +170,10 @@ export function WireUploadLayout({
               >
                 <Ionicons name="image" size={24} color="#fff" />
               </TouchableOpacity>
-            </View> */}
+            </View>
           </View>
 
-          {/* <DropDown
+          <DropDown
             styles={{
               marginLeft: 0,
               marginRight: 0,
@@ -198,7 +196,7 @@ export function WireUploadLayout({
               { key: 1, label: "Turn — ON" },
               { key: 2, label: "Turn — OFF" },
             ]}
-          /> */}
+          />
         </View>
 
         <View
