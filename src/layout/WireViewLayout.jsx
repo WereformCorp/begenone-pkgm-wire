@@ -50,7 +50,7 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
           userName={userName}
           subscribersCount={subscribersCount}
           timeAgo={timeAgo}
-          // viewsText={viewsText}
+          viewsText={viewsText}
         />
         <View>
           <Text style={WireViewLayoutStyles.mainText}>
@@ -68,15 +68,15 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
         </View>
       </View>
       <View>
-        {/* {isItMe && (
+        {isItMe && (
           <CustomizedButton
             label={"Delete"}
             textColor={"white"}
             style={{ backgroundColor: "red", marginTop: 12 }}
             onPress={onPressDeleteButton}
           />
-        )} */}
-        {/* <MenuInteraction /> */}
+        )}
+        <MenuInteraction />
       </View>
     </ScrollView>
   );
