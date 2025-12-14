@@ -5,8 +5,9 @@ import {
   MenuInteraction,
   MenuChannelMeta,
   CustomizedButton,
-} from "@begenone/pkgm-shared";
+} from "@wereform/pkgm-shared";
 import { WireViewLayoutStyles } from "../styles/WireViewLayoutStyles";
+import { useState } from "react";
 
 export function WireViewLayout({
   content,
@@ -18,6 +19,8 @@ export function WireViewLayout({
   isItMe,
   onPressDeleteButton,
 }) {
+  const [isPressed, setPressed] = useState(false);
+
   const contentText =
     content ??
     `Curiosity is the real engine of progress. You don’t need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
@@ -32,6 +35,10 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
   const finalText = contentText
     ? contentText.replace(/\r\n/g, "\n").split("\n")
     : [];
+
+  function togglePressed() {
+    setPressed(prev => !prev);
+  }
 
   return (
     <ScrollView
@@ -68,15 +75,30 @@ Mastery isn’t perfection; it’s the relentless act of returning to the edge �
         </View>
       </View>
       <View>
-        {isItMe && (
+        <MenuInteraction pressed={togglePressed} />
+
+        {isItMe && isPressed && (
           <CustomizedButton
             label={"Delete"}
             textColor={"white"}
-            style={{ backgroundColor: "red", marginTop: 12 }}
-            onPress={onPressDeleteButton}
+            style={[
+              { backgroundColor: "red", marginTop: 12 },
+              isItMe
+                ? {
+                    position: "absolute",
+                    width: 80,
+                    height: 35,
+                    right: 24,
+                    bottom: 48,
+                  }
+                : "",
+            ]}
+            onPress={() => {
+              console.log("DELETE PRESSED");
+              onPressDeleteButton();
+            }}
           />
         )}
-        <MenuInteraction />
       </View>
     </ScrollView>
   );

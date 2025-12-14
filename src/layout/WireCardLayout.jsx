@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { MenuChannelMeta, MenuInteraction } from "@begenone/pkgm-shared";
+import { MenuChannelMeta, MenuInteraction } from "@wereform/pkgm-shared";
 import { Ionicons } from "@expo/vector-icons";
 import { WireChannelMetadata } from "../components/WireChannelMetadata";
 import { WireCardLayoutStyles } from "../styles/WireCardLayoutStyles";

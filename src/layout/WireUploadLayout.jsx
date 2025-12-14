@@ -13,7 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { Ionicons } from "@expo/vector-icons";
 import { WireUploadStyles } from "../styles/WireUploadStyles";
-import { CustomizedButton, DropDown, InputField } from "@begenone/pkgm-shared";
+import { CustomizedButton, DropDown, InputField } from "@wereform/pkgm-shared";
 
 export function WireUploadLayout({
   profilePic,
