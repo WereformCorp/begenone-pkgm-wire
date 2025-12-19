@@ -2,6 +2,10 @@
   "name": "@wereform/pkgm-wire",
   "version": "1.0.1",
   "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "babel src --out-dir dist --extensions .js,.jsx"
   },
@@ -14,10 +18,10 @@
     "react-native": "*"
   },
   "dependencies": {
-    "@wereform/pkgm-channel": "^1.0.0",
-    "@wereform/pkgm-settings": "^1.0.0",
-    "@wereform/pkgm-shared": "^1.0.0",
-    "@wereform/pkgm-video": "^1.0.0",
+    "@wereform/pkgm-channel": "^1.0.3",
+    "@wereform/pkgm-settings": "^1.0.2",
+    "@wereform/pkgm-shared": "^1.0.2",
+    "@wereform/pkgm-video": "^1.0.2",
     "expo-image-picker": "^17.0.8",
     "expo-video-thumbnails": "^10.0.7"
   },
