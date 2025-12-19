@@ -1,13 +1,17 @@
 {
   "name": "@wereform/pkgm-wire",
-  "version": "1.0.2",
+  "version": "1.0.3",
+  "source": "src/index.js",
   "main": "dist/index.js",
+  "react-native": "src/index.js",
   "files": [
     "dist",
+    "src",
     "README.md"
   ],
   "scripts": {
-    "build": "babel src --out-dir dist --extensions .js,.jsx"
+    "build": "babel src --out-dir dist --extensions .js,.jsx",
+    "prepublishOnly": "pnpm run build"
   },
   "publishConfig": {
     "access": "public"
