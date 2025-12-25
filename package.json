@@ -1,7 +1,7 @@
 {
   "name": "@wereform/pkgm-wire",
   "version": "1.0.3",
-  "source": "dist/index.js",
+  "source": "src/index.js",
   "main": "dist/index.js",
   "react-native": "src/index.js",
   "files": [

@@ -20,8 +20,6 @@ export function WireUploadLayout({
   userName,
   onPressVideoUploadScreen,
   onPressWireUpload,
-  showUploadContainers = false,
-  showDropDowns = false,
 }) {
   const [wireText, setWireText] = useState(``);
   const [media, setMedia] = useState(null); // image/video URI
@@ -162,49 +160,43 @@ export function WireUploadLayout({
             </View>
 
             {/* 3 — Upload Button */}
-            {showUploadContainers && (
-              <View style={WireUploadStyles.uploadButtonContainer}>
-                <TouchableOpacity style={WireUploadStyles.AIGenerateButton}>
-                  <Ionicons name="sparkles-outline" size={24} color="#fff" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={pickMedia}
-                  style={WireUploadStyles.uploadImageButton}
-                >
-                  <Ionicons name="image" size={24} color="#fff" />
-                </TouchableOpacity>
-              </View>
-            )}
+            <View style={WireUploadStyles.uploadButtonContainer}>
+              <TouchableOpacity style={WireUploadStyles.AIGenerateButton}>
+                <Ionicons name="sparkles-outline" size={24} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={pickMedia}
+                style={WireUploadStyles.uploadImageButton}
+              >
+                <Ionicons name="image" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          {showDropDowns && (
-            <>
-              <DropDown
-                styles={{
-                  marginLeft: 0,
-                  marginRight: 0,
-                  marginTop: 18,
-                  // paddingRight: 24,
-                }}
-                iconStyles={{ paddingRight: 16 }}
-                selectText={"Select Age Group"}
-                data={[
-                  { key: 1, label: "Under 14 of age" },
-                  { key: 2, label: "Above 14 of age" },
-                ]}
-              />
+          <DropDown
+            styles={{
+              marginLeft: 0,
+              marginRight: 0,
+              marginTop: 18,
+              // paddingRight: 24,
+            }}
+            iconStyles={{ paddingRight: 16 }}
+            selectText={"Select Age Group"}
+            data={[
+              { key: 1, label: "Under 14 of age" },
+              { key: 2, label: "Above 14 of age" },
+            ]}
+          />
 
-              <DropDown
-                styles={{ marginLeft: 0, marginRight: 0, marginTop: 18 }}
-                selectText={"Comments"}
-                iconStyles={{ paddingRight: 16 }}
-                data={[
-                  { key: 1, label: "Turn — ON" },
-                  { key: 2, label: "Turn — OFF" },
-                ]}
-              />
-            </>
-          )}
+          <DropDown
+            styles={{ marginLeft: 0, marginRight: 0, marginTop: 18 }}
+            selectText={"Comments"}
+            iconStyles={{ paddingRight: 16 }}
+            data={[
+              { key: 1, label: "Turn — ON" },
+              { key: 2, label: "Turn — OFF" },
+            ]}
+          />
         </View>
 
         <View
