@@ -4,6 +4,45 @@ import { Ionicons } from "@expo/vector-icons";
 import { WireChannelMetadata } from "../components/WireChannelMetadata";
 import { WireCardLayoutStyles } from "../styles/WireCardLayoutStyles";
 
+/**
+ * WireCardLayout
+ *
+ * Compact, tappable preview card for rendering a Wire in feeds or lists.
+ *
+ * Responsibilities:
+ * - Displays channel metadata (via WireChannelMetadata)
+ * - Renders multi-line wire content with a soft line limit
+ * - Provides interaction actions via MenuInteraction
+ * - Acts as a navigation trigger when pressed
+ *
+ * Props:
+ * - content: string
+ *   Full wire text content.
+ *
+ * - channelLogo: string (URL)
+ *   Channel or user avatar image.
+ *
+ * - userName: string
+ *   Channel or author display name.
+ *
+ * - subscribersCount: string | number
+ *   Subscriber count shown in metadata.
+ *
+ * - timeAgo: string
+ *   Relative publish time (e.g. "2h ago").
+ *
+ * - viewsText: string | number
+ *   View count for the wire.
+ *
+ * - onPress: function
+ *   Triggered when the card is tapped.
+ *
+ * Behavior:
+ * - Normalizes line breaks and whitespace
+ * - Limits visible lines for feed readability
+ * - Shows "See more" affordance for full view
+ */
+
 export function WireCardLayout({
   content,
   channelLogo,

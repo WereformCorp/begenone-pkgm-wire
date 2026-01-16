@@ -9,6 +9,38 @@ import {
 import { WireViewLayoutStyles } from "../styles/WireViewLayoutStyles";
 import { useState } from "react";
 
+/**
+ * WireViewLayout
+ *
+ * Full-screen wire reader view.
+ *
+ * Responsibilities:
+ * - Displays complete wire content
+ * - Shows channel metadata and engagement actions
+ * - Conditionally exposes destructive actions for owner
+ *
+ * Props:
+ * - content: string
+ *   Full wire text.
+ *
+ * - channelLogo: string (URL)
+ * - userName: string
+ * - subscribersCount: string | number
+ * - timeAgo: string
+ * - viewsText: string | number
+ *
+ * - isItMe: boolean
+ *   Indicates ownership of the wire.
+ *
+ * - onPressDeleteButton: function
+ *   Triggered when delete is confirmed.
+ *
+ * Behavior:
+ * - Preserves original paragraph formatting
+ * - Uses MenuInteraction for engagement UI
+ * - Reveals delete action only when owned + explicitly triggered
+ */
+
 export function WireViewLayout({
   content,
   channelLogo,

@@ -15,6 +15,47 @@ import { Ionicons } from "@expo/vector-icons";
 import { WireUploadStyles } from "../styles/WireUploadStyles";
 import { CustomizedButton, DropDown, InputField } from "@wereform/pkgm-shared";
 
+/**
+ * WireUploadLayout
+ *
+ * Full wire composer layout with optional media, AI hooks, and settings.
+ *
+ * Responsibilities:
+ * - Wire text composition
+ * - Image/video selection with thumbnail previews
+ * - Optional dropdowns for moderation & audience controls
+ * - Entry point to video upload flow
+ *
+ * Props:
+ * - profilePic: string (URL)
+ *   Current user profile image.
+ *
+ * - userName: string
+ *   Display name of the posting user.
+ *
+ * - onPressVideoUploadScreen: function
+ *   Navigates to video upload flow.
+ *
+ * - onPressWireUpload: function
+ *   Called with (wireText, heading) when posting.
+ *
+ * - showUploadContainers: boolean
+ *   Toggles AI/media action buttons.
+ *
+ * - showDropDowns: boolean
+ *   Toggles age-group and comment settings dropdowns.
+ *
+ * Internal State:
+ * - wireText: string
+ * - media: selected assets
+ * - thumbnails: preview URIs for selected media
+ *
+ * Behavior:
+ * - Supports mixed image/video selection
+ * - Auto-generates video thumbnails
+ * - Keeps UI vertically structured for mobile ergonomics
+ */
+
 export function WireUploadLayout({
   profilePic,
   userName,
