@@ -62,10 +62,16 @@ export function WireChannelMetadata({
             {userName || "Default Username"}
           </Text>
           <View style={WireChannelMetadataStyles.subCountContainer}>
-            <Text style={WireChannelMetadataStyles.subCount}>
-              {subscribersCount || "0"}
-            </Text>
-            <Text style={WireChannelMetadataStyles.subText}>Subscribers</Text>
+            {subscribersCount > 0 && (
+              <>
+                <Text style={WireChannelMetadataStyles.subCount}>
+                  {subscribersCount || "0"}
+                </Text>
+                <Text style={WireChannelMetadataStyles.subText}>
+                  Subscribers
+                </Text>
+              </>
+            )}
           </View>
         </View>
       </View>
@@ -81,12 +87,16 @@ export function WireChannelMetadata({
           </View>
         </View>
         <View style={WireChannelMetadataStyles.viewsContainer}>
-          <Text style={WireChannelMetadataStyles.viewsText}>
-            {viewsText || "0"}
-          </Text>
-          <View style={WireChannelMetadataStyles.eyeIcon}>
-            <Ionicons name="eye-outline" size={16} color="white" />
-          </View>
+          {viewsText > 0 && (
+            <>
+              <Text style={WireChannelMetadataStyles.viewsText}>
+                {viewsText || "0"}
+              </Text>
+              <View style={WireChannelMetadataStyles.eyeIcon}>
+                <Ionicons name="eye-outline" size={16} color="white" />
+              </View>
+            </>
+          )}
         </View>
       </View>
     </View>

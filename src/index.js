@@ -1,3 +1,3 @@
-export { WireCardLayout } from "./layout/WireCardLayout.jsx";
-export { WireViewLayout } from "./layout/WireViewLayout.jsx";
-export { WireUploadLayout } from "./layout/WireUploadLayout.jsx";
+export { WireCardLayout } from "./layout/WireCardLayout";
+export { WireViewLayout } from "./layout/WireViewLayout";
+export { WireUploadLayout } from "./layout/WireUploadLayout";

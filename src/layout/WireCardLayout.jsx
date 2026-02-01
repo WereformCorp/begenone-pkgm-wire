@@ -99,7 +99,7 @@ export function WireCardLayout({
           <Text style={WireCardLayoutStyles.seeMore}>See more →</Text>
         </View>
       </View>
-      <MenuInteraction containerStyles={{ marginBottom: 12 }} />
+      {/* <MenuInteraction containerStyles={{ marginBottom: 12 }} /> */}
     </TouchableOpacity>
   );
 }
