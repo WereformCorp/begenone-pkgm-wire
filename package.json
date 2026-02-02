@@ -1,6 +1,6 @@
 {
   "name": "@wereform/pkgm-wire",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "source": "dist/index.js",
   "main": "dist/index.js",
   "react-native": "dist/index.js",
@@ -22,10 +22,10 @@
     "react-native": "*"
   },
   "dependencies": {
-    "@wereform/pkgm-channel": "^1.0.5",
-    "@wereform/pkgm-settings": "^1.0.6",
-    "@wereform/pkgm-shared": "^1.0.5",
-    "@wereform/pkgm-video": "^1.0.4",
+    "@wereform/pkgm-channel": "^1.0.8",
+    "@wereform/pkgm-settings": "^1.0.8",
+    "@wereform/pkgm-shared": "^1.0.6",
+    "@wereform/pkgm-video": "^1.0.10",
     "expo-image-picker": "^17.0.8",
     "expo-video-thumbnails": "^10.0.7"
   },
