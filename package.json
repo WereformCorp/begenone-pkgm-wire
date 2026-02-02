@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@wereform/pkgm-channel": "^1.0.9",
-    "@wereform/pkgm-settings": "^1.0.9",
+    "@wereform/pkgm-settings": "^1.0.10",
     "@wereform/pkgm-shared": "^1.0.7",
     "@wereform/pkgm-video": "^1.0.12",
     "expo-image-picker": "^17.0.8",
