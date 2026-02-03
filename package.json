@@ -1,6 +1,6 @@
 {
   "name": "@wereform/pkgm-wire",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "source": "dist/index.js",
   "main": "dist/index.js",
   "react-native": "dist/index.js",
@@ -25,7 +25,7 @@
     "@wereform/pkgm-channel": "^1.0.9",
     "@wereform/pkgm-settings": "^1.0.12",
     "@wereform/pkgm-shared": "^1.0.7",
-    "@wereform/pkgm-video": "^1.0.14",
+    "@wereform/pkgm-video": "^1.0.17",
     "expo-image-picker": "^17.0.8",
     "expo-video-thumbnails": "^10.0.7"
   },
