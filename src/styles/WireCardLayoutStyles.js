@@ -1,82 +1,62 @@
 import { StyleSheet } from "react-native";
-import { globalStyles } from "./globalStyles";
 
-/*
-  WireCardLayoutStyles
-
-  Purpose:
-  Styles for the Wire card container and text content used in
-  short-form, text-first Wire posts.
-
-  Design constraints:
-  - Card spacing and padding are tuned for feed readability.
-  - Background and border radius must remain consistent with
-    global design tokens to avoid visual drift across feeds.
-  - Height is flexible, but constrained to prevent runaway text
-    from breaking scroll performance.
-*/
+const COLORS = {
+  bgBase: "#0E0E0E",
+  bgRaised: "#171413",
+  textPrimary: "#fff",
+  textMuted: "rgba(255,255,255,0.6)",
+  border: "rgba(255,255,255,0.04)",
+  accent: "#ff5e00",
+  accentSubtle: "rgba(255,94,0,0.12)",
+};
 
 export const WireCardLayoutStyles = StyleSheet.create({
-  container: {
-    /*
-      Core card container for a single Wire.
-
-      Intent:
-      - Flexible height to accommodate variable text length.
-      - Space-between ensures metadata and actions stay anchored.
-      - Margin creates separation between feed items.
-    */
-    width: "auto",
-    minHeight: 200,
-    justifyContent: "space-between",
-    // aspectRatio intentionally disabled; text-driven cards must grow vertically
-    margin: 12,
-    padding: 12,
-    backgroundColor: globalStyles.colors.colorPrimary350,
-    borderRadius: globalStyles.borders.borderPrimary100,
+  pressable: {
+    marginHorizontal: 12,
+    marginVertical: 8,
   },
 
-  mainTextContainer: {
-    /*
-      Wrapper around the main Wire text.
+  container: {
+    flexDirection: "column",
+    backgroundColor: COLORS.bgRaised,
+    borderRadius: 18,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: COLORS.accentSubtle,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    elevation: 6,
+    // aspectRatio: 1,
+    minHeight: 280,
+  },
 
-      Constraint:
-      - maxHeight prevents extremely long posts from dominating
-        the feed and degrading scroll performance.
-      - Rounded edges visually separate text from card background.
-    */
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    marginTop: 10,
-    maxHeight: 360,
+  metaSection: {
+    minHeight: 100,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.accentSubtle,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
 
   mainText: {
-    /*
-      Primary Wire text styling.
-
-      Readability choices:
-      - Slightly increased lineHeight for dense text blocks.
-      - Subtle letterSpacing improves legibility on mobile screens.
-    */
-    color: "#ddd",
+    color: COLORS.textPrimary,
     fontSize: 15,
     lineHeight: 22,
-    letterSpacing: 0.3,
   },
 
-  seeMore: {
-    /*
-      "See more" affordance for truncated text.
-
-      Intent:
-      - Visually distinct but not dominant.
-      - Must remain tappable and readable on small screens.
-    */
-    color: "#fff",
-    fontWeight: "600",
-    marginTop: 4,
-    fontSize: 14,
+  interactionSection: {
+    paddingHorizontal: 8,
+    paddingBottom: 8,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.accentSubtle,
   },
 });

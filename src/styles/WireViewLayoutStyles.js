@@ -1,62 +1,70 @@
 import { StyleSheet } from "react-native";
-import { globalStyles } from "./globalStyles";
 
-/*
-  WireViewLayoutStyles
-
-  Purpose:
-  Styles for the full Wire view screen, where a single Wire
-  is read in isolation (expanded, focused context).
-
-  Design constraints:
-  - Prioritize long-form readability over feed density.
-  - Spacing is intentionally more generous than card layouts.
-  - Bottom margin reserves space for fixed actions or navigation.
-*/
+const COLORS = {
+  bgBase: "#0E0E0E",
+  bgRaised: "#171413",
+  textPrimary: "#fff",
+  textMuted: "rgba(255,255,255,0.6)",
+  border: "rgba(255,255,255,0.04)",
+  accent: "#ff5e00",
+  accentSubtle: "rgba(255,94,0,0.12)",
+  inputBg: "#1C1C1C",
+};
 
 export const WireViewLayoutStyles = StyleSheet.create({
   container: {
-    /*
-      Primary container for an expanded Wire.
-
-      Intent:
-      - Acts as a reading surface, not a feed card.
-      - Increased horizontal padding improves text legibility.
-      - Bottom margin prevents overlap with persistent UI elements.
-    */
-    width: "auto",
-    margin: 12,
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingLeft: 18,
-    paddingRight: 18,
-    backgroundColor: globalStyles.colors.colorPrimary350,
-    borderRadius: globalStyles.borders.borderPrimary200,
+    flex: 1,
+    backgroundColor: COLORS.bgBase,
     marginBottom: 96,
   },
 
   secondaryContainer: {
-    /*
-      Inner vertical stack for content blocks
-      (text, metadata, media, actions).
+    backgroundColor: COLORS.bgRaised,
+    overflow: "hidden",
+  },
 
-      Constraint:
-      - Column layout ensures predictable reading flow.
-    */
-    flexDirection: "column",
-    paddingBottom: 24,
+  metaSection: {
+    minHeight: 100,
+  },
+
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 12,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
 
   mainText: {
-    /*
-      Primary Wire text in expanded view.
+    color: COLORS.textPrimary,
+    fontSize: 17,
+    lineHeight: 26,
+  },
 
-      Readability choices:
-      - Larger fontSize and lineHeight than feed cards.
-      - Optimized for sustained reading, not scanning.
-    */
-    color: "#fff",
-    lineHeight: 28,
-    fontSize: 18,
+  interactionSection: {
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+  },
+
+  commentSection: {
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+  },
+
+  commentInputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 10,
+  },
+
+  commentInput: {
+    flex: 1,
+    color: COLORS.textPrimary,
+    fontSize: 15,
+    paddingVertical: 8,
   },
 });
