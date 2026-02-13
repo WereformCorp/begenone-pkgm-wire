@@ -1,49 +1,14 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import { MenuChannelMeta, MenuInteraction } from "@wereform/pkgm-shared";
-import { Ionicons } from "@expo/vector-icons";
-import { WireChannelMetadata } from "../components/WireChannelMetadata";
-import { WireCardLayoutStyles } from "../styles/WireCardLayoutStyles";
+import { WireCardLayoutStyles as S } from "../styles/WireCardLayoutStyles";
+import { memo } from "react";
 
-/**
- * WireCardLayout
- *
- * Compact, tappable preview card for rendering a Wire in feeds or lists.
- *
- * Responsibilities:
- * - Displays channel metadata (via WireChannelMetadata)
- * - Renders multi-line wire content with a soft line limit
- * - Provides interaction actions via MenuInteraction
- * - Acts as a navigation trigger when pressed
- *
- * Props:
- * - content: string
- *   Full wire text content.
- *
- * - channelLogo: string (URL)
- *   Channel or user avatar image.
- *
- * - userName: string
- *   Channel or author display name.
- *
- * - subscribersCount: string | number
- *   Subscriber count shown in metadata.
- *
- * - timeAgo: string
- *   Relative publish time (e.g. "2h ago").
- *
- * - viewsText: string | number
- *   View count for the wire.
- *
- * - onPress: function
- *   Triggered when the card is tapped.
- *
- * Behavior:
- * - Normalizes line breaks and whitespace
- * - Limits visible lines for feed readability
- * - Shows "See more" affordance for full view
- */
+const DEFAULT_AVATAR =
+  "https://begenone-images.s3.us-east-1.amazonaws.com/default-user-photo.jpg";
 
-export function WireCardLayout({
+const LIMIT = 8;
+
+function WireCardLayoutComponent({
   content,
   channelLogo,
   userName,
@@ -51,55 +16,76 @@ export function WireCardLayout({
   timeAgo,
   viewsText,
   onPress,
+  onMenuPress,
+  initialLiked,
+  initialDisliked,
+  likesCount,
+  dislikesCount,
+  onLike,
+  onDislike,
+  onShare,
+  onComment,
+  onRepost,
 }) {
-  const limit = 8;
-
-  const contentText =
-    content ??
-    `Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem
-            distinctio porro qui minus totam eius. Sed laudantium nisi expedita
-            distinctio dignissimos dicta praesentium nihil iste velit cumque!
-            Assumenda illum veritatis, ipsam sint
-            
-            vero corporis distinctio rem
-            quisquam natus iste. Unde esse consequuntur maiores repellendus, cum
-            voluptatem vero incidunt temporibus.`;
-
-  // Only compute finalText if we actually have content
+  const contentText = content ?? "";
   const finalText = contentText
     ? contentText.replace(/\r\n/g, "\n").split("\n")
     : [];
 
   return (
-    <TouchableOpacity style={WireCardLayoutStyles.container} onPress={onPress}>
-      <View>
-        <WireChannelMetadata
-          channelLogo={
-            channelLogo ||
-            "https://begenone-images.s3.us-east-1.amazonaws.com/default-user-photo.jpg"
-          }
-          userName={userName}
-          subscribersCount={subscribersCount}
-          timeAgo={timeAgo}
-          viewsText={viewsText}
-        />
+    <Pressable style={S.pressable} onPress={onPress}>
+      {({ pressed }) => (
+        <View style={[S.container, { opacity: pressed ? 0.94 : 1 }]}>
+          <View style={S.metaSection}>
+            <MenuChannelMeta
+              channelLogo={channelLogo || DEFAULT_AVATAR}
+              userName={userName}
+              subscribersCount={subscribersCount}
+              timeAgo={timeAgo}
+              viewsText={viewsText}
+              showSubscribe={false}
+              showNotificationBell={false}
+              showMenuButton={false}
+              containerStyles={{ marginHorizontal: 0, marginVertical: 0 }}
+              cardHeight={100}
+              hideCardBorder={true}
+            />
+          </View>
 
-        <View style={WireCardLayoutStyles.mainTextContainer}>
-          {finalText.length > 0 && (
-            <Text numberOfLines={limit} style={WireCardLayoutStyles.mainText}>
-              {finalText.map((text, index) => (
-                <Text key={index}>
-                  {text.trim().replace(/\s+/g, " ")}
-                  {index < finalText.length - 1 ? "\n" : ""}
-                </Text>
-              ))}
-            </Text>
-          )}
-          <Text> </Text>
-          <Text style={WireCardLayoutStyles.seeMore}>See more →</Text>
+          <View style={S.content}>
+            {finalText.length > 0 && (
+              <Text numberOfLines={LIMIT} style={S.mainText}>
+                {finalText.map((text, i) => (
+                  <Text key={i}>
+                    {text.trim().replace(/\s+/g, " ")}
+                    {i < finalText.length - 1 ? "\n" : ""}
+                  </Text>
+                ))}
+              </Text>
+            )}
+          </View>
+
+          <View style={S.interactionSection}>
+            <MenuInteraction
+              variant="minimal"
+              showMenuButton={true}
+              onMenuPress={onMenuPress}
+              initialLiked={initialLiked}
+              initialDisliked={initialDisliked}
+              likesCount={likesCount}
+              dislikesCount={dislikesCount}
+              onLike={onLike}
+              onDislike={onDislike}
+              onShare={onShare}
+              onComment={onComment}
+              onRepost={onRepost}
+              containerStyles={{ paddingVertical: 4 }}
+            />
+          </View>
         </View>
-      </View>
-      {/* <MenuInteraction containerStyles={{ marginBottom: 12 }} /> */}
-    </TouchableOpacity>
+      )}
+    </Pressable>
   );
 }
+
+export const WireCardLayout = memo(WireCardLayoutComponent);
