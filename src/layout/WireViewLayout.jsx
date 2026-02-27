@@ -1,4 +1,12 @@
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { useRef, useState } from "react";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { MenuInteraction, MenuChannelMeta } from "@wereform/pkgm-shared";
 import { WireViewLayoutStyles as S } from "../styles/WireViewLayoutStyles";
 import { WireCardLayout } from "./WireCardLayout";
@@ -39,10 +47,30 @@ export function WireViewLayout({
   onComment,
   onRepost,
   onMenuPress,
-  commentValue = "",
-  onCommentChange,
+  commentValue: controlledValue,
+  onCommentChange: controlledOnChange,
   onSubmitComment,
 }) {
+  const inputRef = useRef(null);
+  const [internalValue, setInternalValue] = useState("");
+  const isControlled = controlledOnChange != null;
+  const commentValue = isControlled ? controlledValue ?? "" : internalValue;
+  const onCommentChange = isControlled
+    ? controlledOnChange
+    : (v) => setInternalValue(v);
+
+  function handleEmojiPress() {
+    inputRef.current?.focus();
+  }
+
+  function handlePostPress() {
+    const trimmed = commentValue.trim();
+    if (trimmed) {
+      onSubmitComment?.();
+      if (!isControlled) setInternalValue("");
+    }
+  }
+
   const contentText =
     content ??
     `Curiosity is the real engine of progress. You don't need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
@@ -108,49 +136,76 @@ Mastery isn't perfection; it's the relentless act of returning to the edge — a
             containerStyles={{ paddingVertical: 4 }}
           />
         </View>
-
-        <View style={S.commentSection}>
-          <View style={S.commentInputWrapper}>
-            <TextInput
-              placeholder="Add a comment..."
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              style={S.commentInput}
-              value={commentValue}
-              onChangeText={onCommentChange}
-              onSubmitEditing={onSubmitComment}
-              returnKeyType="send"
-              multiline={false}
-            />
-          </View>
-        </View>
-
-        <View>
-          <Text
-            style={{
-              color: "#fff",
-              fontSize: 16,
-              fontWeight: "bold",
-              paddingHorizontal: 12,
-              paddingVertical: 12,
-            }}
+      </View>
+      <View style={S.commentSection}>
+        <View style={S.commentInputWrapper}>
+          <Pressable
+            onPress={handleEmojiPress}
+            style={S.commentEmojiButton}
+            hitSlop={8}
           >
-            Comments
-          </Text>
-          <WireCardLayout
-            content={`Curiosity is the real engine of progress. You don't need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
+            <Ionicons
+              name="happy-outline"
+              size={22}
+              color="rgba(255,255,255,0.6)"
+            />
+          </Pressable>
+          <TextInput
+            ref={inputRef}
+            placeholder="Add a comment..."
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            style={S.commentInput}
+            value={commentValue}
+            onChangeText={onCommentChange}
+            onSubmitEditing={handlePostPress}
+            returnKeyType="send"
+            multiline={false}
+          />
+          <Pressable
+            onPress={handlePostPress}
+            style={({ pressed }) => [
+              S.commentPostButton,
+              { opacity: pressed ? 0.7 : 1 },
+            ]}
+            hitSlop={8}
+          >
+            <Text
+              style={[
+                S.commentPostText,
+                !commentValue.trim() && S.commentPostTextDisabled,
+              ]}
+            >
+              Post
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      <View>
+        <Text
+          style={{
+            color: "#fff",
+            fontSize: 16,
+            fontWeight: "bold",
+            paddingHorizontal: 12,
+            paddingVertical: 12,
+          }}
+        >
+          Comments
+        </Text>
+        <WireCardLayout
+          content={`Curiosity is the real engine of progress. You don't need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
 
 Stop waiting to "figure it out" first. Dive in, break things, rebuild smarter. The mind grows through friction, not comfort. 
 
 Mastery isn't perfection; it's the relentless act of returning to the edge — again and again — until the unknown feels like home. The goal isn't to win. It's to keep becoming.
 
 #curiosity #growth #mindset #learning`}
-            channelLogo={DEFAULT_AVATAR}
-            userName="John Doe"
-            subscribersCount={100}
-            timeAgo="1 hour ago"
-            viewsText="100 views"
-          />
-        </View>
+          channelLogo={DEFAULT_AVATAR}
+          userName="John Doe"
+          subscribersCount={100}
+          timeAgo="1 hour ago"
+          viewsText="100 views"
+        />
       </View>
     </ScrollView>
   );
