@@ -1,18 +1,15 @@
 import { useState } from "react";
 import {
   Image,
+  Pressable,
   ScrollView,
-  StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
-
 import * as ImagePicker from "expo-image-picker";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { Ionicons } from "@expo/vector-icons";
-import { WireUploadStyles } from "../styles/WireUploadStyles";
+import { WireUploadStyles as S } from "../styles/WireUploadStyles";
 import { CustomizedButton, DropDown, InputField } from "@wereform/pkgm-shared";
 
 /**
@@ -25,35 +22,6 @@ import { CustomizedButton, DropDown, InputField } from "@wereform/pkgm-shared";
  * - Image/video selection with thumbnail previews
  * - Optional dropdowns for moderation & audience controls
  * - Entry point to video upload flow
- *
- * Props:
- * - profilePic: string (URL)
- *   Current user profile image.
- *
- * - userName: string
- *   Display name of the posting user.
- *
- * - onPressVideoUploadScreen: function
- *   Navigates to video upload flow.
- *
- * - onPressWireUpload: function
- *   Called with (wireText, heading) when posting.
- *
- * - showUploadContainers: boolean
- *   Toggles AI/media action buttons.
- *
- * - showDropDowns: boolean
- *   Toggles age-group and comment settings dropdowns.
- *
- * Internal State:
- * - wireText: string
- * - media: selected assets
- * - thumbnails: preview URIs for selected media
- *
- * Behavior:
- * - Supports mixed image/video selection
- * - Auto-generates video thumbnails
- * - Keeps UI vertically structured for mobile ergonomics
  */
 
 export function WireUploadLayout({
@@ -64,8 +32,8 @@ export function WireUploadLayout({
   showUploadContainers = false,
   showDropDowns = false,
 }) {
-  const [wireText, setWireText] = useState(``);
-  const [media, setMedia] = useState(null); // image/video URI
+  const [wireText, setWireText] = useState("");
+  const [media, setMedia] = useState(null);
   const [thumbnails, setThumbnails] = useState([]);
   const [heading, setHeading] = useState("Default Heading!");
 
@@ -80,211 +48,182 @@ export function WireUploadLayout({
     if (result.canceled) return;
 
     const assets = result.assets;
-
-    // Save raw assets
     setMedia(assets);
 
-    // Generate thumbnails for videos, or use image URI directly
     const finalThumbs = await Promise.all(
-      assets.map(async asset => {
+      assets.map(async (asset) => {
         const isVideo =
           asset.type === "video" || asset.mimeType?.startsWith("video");
 
         if (isVideo) {
           try {
-            const { uri } = await VideoThumbnails.getThumbnailAsync(asset.uri, {
-              time: 1000,
-            });
+            const { uri } = await VideoThumbnails.getThumbnailAsync(
+              asset.uri,
+              { time: 1000 },
+            );
             return uri;
           } catch (err) {
             console.log("Video thumbnail error:", err);
             return null;
           }
         }
-
-        // Image → use directly
         return asset.uri;
-      })
+      }),
     );
-
-    console.log(finalThumbs);
 
     setThumbnails(finalThumbs);
   };
 
-  console.log(wireText);
-
   return (
-    <ScrollView>
-      <View style={WireUploadStyles.container}>
-        <View style={WireUploadStyles.profileSection}>
-          <Image
-            source={{
-              uri:
-                profilePic ||
-                "https://begenone-images.s3.us-east-1.amazonaws.com/default-user-photo.jpg",
-            }}
-            style={WireUploadStyles.userImage}
-          />
-
-          <View style={WireUploadStyles.userInfo}>
-            <Text style={WireUploadStyles.userName}>
+    <ScrollView style={S.scroll}>
+      <View style={S.container}>
+        {/* profile strip */}
+        <View style={S.profileSection}>
+          <View style={S.avatarWrapper}>
+            <Image
+              source={{
+                uri:
+                  profilePic ||
+                  "https://begenone-images.s3.us-east-1.amazonaws.com/default-user-photo.jpg",
+              }}
+              style={S.avatarImage}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={S.profileInfo}>
+            <Text style={S.profileName}>
               {userName || "Default Username"}
             </Text>
-
-            {/* Link to user's public-facing channel page */}
-            {/* <TouchableOpacity
-              onPress={() => Linking.openURL("https://begenone.com")}
-            >
-              <Text style={WireUploadStyles.channelSettingsText}>
-                View Channel
-              </Text>
-            </TouchableOpacity> */}
           </View>
         </View>
-        {/* 1 — Composer Input */}
-        <View style={WireUploadStyles.wireInputContainer}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: "900",
-                fontSize: 24,
-                paddingBottom: 12,
-                flexGrow: 1,
-                justifyContent: "flex-start",
-              }}
-            >
-              Create <Text style={{ color: "#ff6000" }}>Wire</Text>
-            </Text>
-            <TouchableOpacity onPress={onPressVideoUploadScreen}>
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "500",
-                  fontSize: 14,
-                  paddingBottom: 12,
-                  // flexGrow: 1,
 
-                  alignSelf: "center",
-                }}
-              >
-                Upload <Text style={{ color: "#ff6000" }}>Video</Text>
+        {/* form */}
+        <View style={S.formArea}>
+          {/* heading */}
+          <View style={S.headingRow}>
+            <Text style={S.heading}>
+              Create <Text style={S.headingAccent}>Wire</Text>
+            </Text>
+            <Pressable
+              onPress={onPressVideoUploadScreen}
+              style={({ pressed }) => [
+                S.videoLink,
+                { opacity: pressed ? 0.8 : 1 },
+              ]}
+            >
+              <Text style={S.videoLinkText}>
+                Upload <Text style={S.videoLinkAccent}>Video</Text>
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
-          <View style={WireUploadStyles.wireInputTextContainer}>
+
+          {/* composer */}
+          <Text style={S.sectionLabel}>Compose</Text>
+          <View style={S.composerCard}>
             <InputField
               multiline
               placeholder="Write your Wire..."
-              inputWrapper={WireUploadStyles.inputWrapper}
-              inputStyle={WireUploadStyles.aboutTextArea}
+              inputWrapper={{ backgroundColor: "transparent", borderWidth: 0 }}
+              inputStyle={S.composerInput}
               value={wireText}
               onChangeText={setWireText}
             />
 
-            {/* 2 — Media Preview (always below text) */}
-            <View style={WireUploadStyles.mediaContainer}>
-              {thumbnails.map((uri, index) => (
-                <TouchableOpacity key={index} onPress={pickMedia}>
-                  <Image
-                    source={{ uri }}
-                    style={WireUploadStyles.mediaThumb}
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
+            {/* media previews */}
+            {thumbnails.length > 0 && (
+              <View style={S.mediaGrid}>
+                {thumbnails.map((uri, index) => (
+                  <Pressable key={index} onPress={pickMedia}>
+                    <View style={S.mediaThumb}>
+                      <Image
+                        source={{ uri }}
+                        style={S.mediaThumbImage}
+                        resizeMode="cover"
+                      />
+                    </View>
+                  </Pressable>
+                ))}
+              </View>
+            )}
 
-            {/* 3 — Upload Button */}
+            {/* toolbar */}
             {showUploadContainers && (
-              <View style={WireUploadStyles.uploadButtonContainer}>
-                <TouchableOpacity style={WireUploadStyles.AIGenerateButton}>
-                  <Ionicons name="sparkles-outline" size={24} color="#fff" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={pickMedia}
-                  style={WireUploadStyles.uploadImageButton}
+              <View style={S.toolbar}>
+                <Pressable
+                  style={({ pressed }) => [
+                    S.toolbarBtn,
+                    { opacity: pressed ? 0.7 : 1 },
+                  ]}
                 >
-                  <Ionicons name="image" size={24} color="#fff" />
-                </TouchableOpacity>
+                  <Ionicons
+                    name="sparkles-outline"
+                    size={20}
+                    color="rgba(255,255,255,0.5)"
+                  />
+                </Pressable>
+                <Pressable
+                  onPress={pickMedia}
+                  style={({ pressed }) => [
+                    S.toolbarBtn,
+                    { opacity: pressed ? 0.7 : 1 },
+                  ]}
+                >
+                  <Ionicons
+                    name="image-outline"
+                    size={20}
+                    color="rgba(255,255,255,0.5)"
+                  />
+                </Pressable>
               </View>
             )}
           </View>
 
+          {/* dropdowns */}
           {showDropDowns && (
             <>
-              <DropDown
-                styles={{
-                  marginLeft: 0,
-                  marginRight: 0,
-                  marginTop: 18,
-                  // paddingRight: 24,
-                }}
-                iconStyles={{ paddingRight: 16 }}
-                selectText={"Select Age Group"}
-                data={[
-                  { key: 1, label: "Under 14 of age" },
-                  { key: 2, label: "Above 14 of age" },
-                ]}
-              />
-
-              <DropDown
-                styles={{ marginLeft: 0, marginRight: 0, marginTop: 18 }}
-                selectText={"Comments"}
-                iconStyles={{ paddingRight: 16 }}
-                data={[
-                  { key: 1, label: "Turn — ON" },
-                  { key: 2, label: "Turn — OFF" },
-                ]}
-              />
+              <Text style={S.sectionLabel}>Settings</Text>
+              <View style={S.dropdownWrapper}>
+                <DropDown
+                  styles={S.dropdownOverride}
+                  iconStyles={{ paddingRight: 16 }}
+                  selectText="Select Age Group"
+                  data={[
+                    { key: 1, label: "Under 14 of age" },
+                    { key: 2, label: "Above 14 of age" },
+                  ]}
+                />
+              </View>
+              <View style={S.dropdownWrapper}>
+                <DropDown
+                  styles={S.dropdownOverride}
+                  selectText="Comments"
+                  iconStyles={{ paddingRight: 16 }}
+                  data={[
+                    { key: 1, label: "Turn — ON" },
+                    { key: 2, label: "Turn — OFF" },
+                  ]}
+                />
+              </View>
             </>
           )}
+
+          {/* actions */}
+          <View style={S.actionRow}>
+            <CustomizedButton
+              label="Post Wire"
+              style={S.postButton}
+              textColor="#fff"
+              onPress={() => onPressWireUpload(wireText, heading)}
+            />
+            <CustomizedButton
+              label="Schedule"
+              style={S.scheduleButton}
+              isDisabled
+              textColor="rgba(255,255,255,0.4)"
+            />
+          </View>
         </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            width: "auto",
-            justifyContent: "space-between",
-
-            marginTop: 60,
-            marginLeft: 24,
-            marginRight: 24,
-          }}
-        >
-          <CustomizedButton
-            label={"Post Wire"}
-            style={{
-              backgroundColor: "#ff6000",
-              marginRight: 6,
-            }}
-            fontWeight={"900"}
-            textColor={"#fff"}
-            onPress={() => onPressWireUpload(wireText, heading)}
-          />
-          {/* <CustomizedButton
-            label={"Schedule"}
-            style={{
-              backgroundColor: "#202020",
-              marginLeft: 6,
-            }}
-            fontWeight={"900"}
-            textColor={"#404040"}
-          /> */}
-        </View>
-
-        {/* 4 — Future AI Row */}
-        {/* <WireAIBar text={text} onChange={setText} /> */}
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({});
