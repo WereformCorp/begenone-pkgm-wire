@@ -1,0 +1,87 @@
+%% begenone-pkgm-wire — Sequence Diagrams
+%% Mermaid.js format (.mmd) — use --- to separate multiple diagrams
+%% Wire layouts use pkgm-shared (MenuInteraction, MenuChannelMeta, InputField, CustomizedButton, DropDown)
+
+%% 1. WIRE VIEW LAYOUT — Full wire reader + interactions + comment input
+sequenceDiagram
+    autonumber
+    participant Parent
+    participant WVL as WireViewLayout
+    participant Shared as pkgm-shared (MenuChannelMeta, MenuInteraction)
+    participant WireCard as WireCardLayout (inline content)
+
+    Parent->>WVL: props (content, channelLogo, userName, timeAgo, viewsText, onLike, onComment, commentValue, onCommentChange, onSubmitComment, ...)
+
+    WVL->>WVL: comment input state (controlled or internal)
+    WVL->>Shared: MenuChannelMeta
+    WVL->>WVL: render content text (wire body)
+    WVL->>Shared: MenuInteraction (like, dislike, share, comment, repost, menu)
+    WVL->>WVL: comment input row (emoji, TextInput, Post)
+
+    User->>Shared: tap Like / Dislike / Share / Comment / Repost
+    Shared->>Parent: onLike() / onComment() / ...
+
+    User->>WVL: type in comment input
+    WVL->>Parent: onCommentChange(value) or setInternalValue
+
+    User->>WVL: tap Post
+    WVL->>WVL: handlePostPress() — trim, submit
+    WVL->>Parent: onSubmitComment()
+    WVL->>WVL: clear input if uncontrolled
+
+---
+%% 2. WIRE CARD LAYOUT — List item with meta, content, interactions
+sequenceDiagram
+    autonumber
+    participant Parent
+    participant Card as WireCardLayout
+    participant Shared as pkgm-shared (MenuChannelMeta, MenuInteraction)
+
+    Parent->>Card: props (content, channelLogo, userName, timeAgo, viewsText, onPress, onLike, onComment, compact, ...)
+
+    Card->>Shared: MenuChannelMeta (compact, dateOnRight, tight when applicable)
+    Card->>Card: render content text
+    Card->>Shared: MenuInteraction (compact for wire cards)
+
+    User->>Card: tap card
+    Card->>Parent: onPress()
+
+    User->>Shared: tap Like / Comment / etc.
+    Shared->>Parent: onLike() / onComment() / ...
+
+---
+%% 3. WIRE UPLOAD LAYOUT — Compose wire, pick media, post
+sequenceDiagram
+    autonumber
+    participant Parent
+    participant WUL as WireUploadLayout
+    participant Shared as pkgm-shared (InputField, CustomizedButton, DropDown)
+    participant ImagePicker as expo-image-picker
+    participant Thumbnails as expo-video-thumbnails
+
+    Parent->>WUL: props (profilePic, userName, onPressVideoUploadScreen, onPressWireUpload, showUploadContainers, showDropDowns)
+
+    WUL->>WUL: useState (wireText, media, thumbnails, heading)
+
+    User->>WUL: type wire text
+    WUL->>WUL: setWireText
+
+    User->>WUL: tap pick media
+    WUL->>ImagePicker: launchImageLibraryAsync(images + videos, allowsMultipleSelection)
+    ImagePicker-->>WUL: result.assets
+    WUL->>WUL: setMedia(assets)
+    loop For each asset (video → thumbnail)
+        WUL->>Thumbnails: getThumbnailAsync(uri) for videos
+        Thumbnails-->>WUL: thumbUri
+    end
+    WUL->>WUL: setThumbnails(finalThumbs)
+
+    opt showDropDowns
+        User->>Shared: select DropDown options (moderation, audience)
+    end
+
+    User->>WUL: tap "Post" / submit
+    WUL->>Parent: onPressWireUpload() with wire data
+
+    User->>WUL: tap video upload CTA
+    WUL->>Parent: onPressVideoUploadScreen()
