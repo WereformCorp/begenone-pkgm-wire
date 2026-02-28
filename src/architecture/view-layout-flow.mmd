@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    participant Parent
+    participant WVL as WireViewLayout
+    participant Shared as pkgm-shared (MenuChannelMeta, MenuInteraction)
+    participant WireCard as WireCardLayout (inline content)
+
+    Parent->>WVL: props (content, channelLogo, userName, timeAgo, viewsText, onLike, onComment, commentValue, onCommentChange, onSubmitComment, ...)
+
+    WVL->>WVL: comment input state (controlled or internal)
+    WVL->>Shared: MenuChannelMeta
+    WVL->>WVL: render content text (wire body)
+    WVL->>Shared: MenuInteraction (like, dislike, share, comment, repost, menu)
+    WVL->>WVL: comment input row (emoji, TextInput, Post)
+
+    User->>Shared: tap Like / Dislike / Share / Comment / Repost
+    Shared->>Parent: onLike() / onComment() / ...
+
+    User->>WVL: type in comment input
+    WVL->>Parent: onCommentChange(value) or setInternalValue
+
+    User->>WVL: tap Post
+    WVL->>WVL: handlePostPress() — trim, submit
+    WVL->>Parent: onSubmitComment()
+    WVL->>WVL: clear input if uncontrolled
