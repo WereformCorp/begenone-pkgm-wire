@@ -1,0 +1,34 @@
+sequenceDiagram
+    autonumber
+    participant Parent
+    participant WUL as WireUploadLayout
+    participant Shared as pkgm-shared (InputField, CustomizedButton, DropDown)
+    participant ImagePicker as expo-image-picker
+    participant Thumbnails as expo-video-thumbnails
+
+    Parent->>WUL: props (profilePic, userName, onPressVideoUploadScreen, onPressWireUpload, showUploadContainers, showDropDowns)
+
+    WUL->>WUL: useState (wireText, media, thumbnails, heading)
+
+    User->>WUL: type wire text
+    WUL->>WUL: setWireText
+
+    User->>WUL: tap pick media
+    WUL->>ImagePicker: launchImageLibraryAsync(images + videos, allowsMultipleSelection)
+    ImagePicker-->>WUL: result.assets
+    WUL->>WUL: setMedia(assets)
+    loop For each asset (video → thumbnail)
+        WUL->>Thumbnails: getThumbnailAsync(uri) for videos
+        Thumbnails-->>WUL: thumbUri
+    end
+    WUL->>WUL: setThumbnails(finalThumbs)
+
+    opt showDropDowns
+        User->>Shared: select DropDown options (moderation, audience)
+    end
+
+    User->>WUL: tap "Post" / submit
+    WUL->>Parent: onPressWireUpload() with wire data
+
+    User->>WUL: tap video upload CTA
+    WUL->>Parent: onPressVideoUploadScreen()
