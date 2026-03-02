@@ -1,0 +1,17 @@
+sequenceDiagram
+    autonumber
+    participant Parent
+    participant Card as WireCardLayout
+    participant Shared as pkgm-shared (MenuChannelMeta, MenuInteraction)
+
+    Parent->>Card: props (content, channelLogo, userName, timeAgo, viewsText, onPress, onLike, onComment, compact, ...)
+
+    Card->>Shared: MenuChannelMeta (compact, dateOnRight, tight when applicable)
+    Card->>Card: render content text
+    Card->>Shared: MenuInteraction (compact for wire cards)
+
+    User->>Card: tap card
+    Card->>Parent: onPress()
+
+    User->>Shared: tap Like / Comment / etc.
+    Shared->>Parent: onLike() / onComment() / ...
