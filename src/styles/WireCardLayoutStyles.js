@@ -11,9 +11,18 @@ const COLORS = {
 };
 
 export const WireCardLayoutStyles = StyleSheet.create({
-  pressable: {
+  wireCardRoot: {
     marginHorizontal: 12,
     marginVertical: 8,
+  },
+
+  wireCardRootCompact: {
+    marginHorizontal: 0,
+    marginVertical: 6,
+  },
+
+  cardPressableFill: {
+    flexGrow: 1,
   },
 
   container: {
@@ -28,7 +37,6 @@ export const WireCardLayoutStyles = StyleSheet.create({
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 6,
-    // aspectRatio: 1,
     minHeight: 280,
   },
 
