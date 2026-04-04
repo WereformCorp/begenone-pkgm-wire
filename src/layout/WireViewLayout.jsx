@@ -7,27 +7,21 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { MenuInteraction, MenuChannelMeta } from "@wereform/pkgm-shared";
+import {
+  MenuInteraction,
+  MenuChannelMeta,
+  RichHtmlBlock,
+} from "@wereform/pkgm-shared";
 import { WireViewLayoutStyles as S } from "../styles/WireViewLayoutStyles";
-import { WireCardLayout } from "./WireCardLayout";
+import { WireCardWithEngagement } from "../components/WireCardWithEngagement";
+import { WireCommentParentStrip } from "../components/WireCommentParentStrip";
 
 const DEFAULT_AVATAR =
   "https://begenone-images.s3.us-east-1.amazonaws.com/default-user-photo.jpg";
 
 /**
- * WireViewLayout
- *
- * Full-screen wire reader view.
- * Design aligned with WireCardLayout: BEGENONE accent, meta, content, interaction, comment input.
- *
- * Props:
- * - content, channelLogo, userName, subscribersCount, timeAgo, viewsText
- * - isItMe, onPressDeleteButton
- * - initialLiked, initialDisliked, likesCount, dislikesCount
- * - onLike, onDislike, onShare, onComment, onRepost, onMenuPress
- * - commentValue, onCommentChange, onSubmitComment
+ * WireViewLayout — full wire reader; channel meta + subscribe + comments list.
  */
-
 export function WireViewLayout({
   content,
   channelLogo,
@@ -37,6 +31,9 @@ export function WireViewLayout({
   viewsText,
   isItMe,
   onPressDeleteButton,
+  engagementManagedExternally = false,
+  userLiked = false,
+  userDisliked = false,
   initialLiked,
   initialDisliked,
   likesCount = 0,
@@ -44,12 +41,26 @@ export function WireViewLayout({
   onLike,
   onDislike,
   onShare,
-  onComment,
-  onRepost,
   onMenuPress,
   commentValue: controlledValue,
   onCommentChange: controlledOnChange,
   onSubmitComment,
+  onChannelPress,
+  isSubscribed,
+  canSubscribe = true,
+  subscribePending = false,
+  onToggleSubscribe,
+  /** Pre-shaped rows: { key, content, channelLogo, userName, subscribersCount, timeAgo, viewsText, wire, isUnderParent? } */
+  commentItems = [],
+  onPressCommentWire,
+  wireType,
+  isUnderParent = false,
+  commentParentLabel,
+  onPressCommentParent,
+  /** Session + API for comment rows (same WireCardWithEngagement as feed). */
+  commentWireToken,
+  commentWireUserId,
+  commentWireApiUrl,
 }) {
   const inputRef = useRef(null);
   const [internalValue, setInternalValue] = useState("");
@@ -57,7 +68,7 @@ export function WireViewLayout({
   const commentValue = isControlled ? controlledValue ?? "" : internalValue;
   const onCommentChange = isControlled
     ? controlledOnChange
-    : (v) => setInternalValue(v);
+    : v => setInternalValue(v);
 
   function handleEmojiPress() {
     inputRef.current?.focus();
@@ -71,23 +82,23 @@ export function WireViewLayout({
     }
   }
 
-  const contentText =
-    content ??
-    `Curiosity is the real engine of progress. You don't need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
+  const contentText = content ?? "<p>No wire content yet.</p>";
 
-Stop waiting to "figure it out" first. Dive in, break things, rebuild smarter. The mind grows through friction, not comfort. 
-
-Mastery isn't perfection; it's the relentless act of returning to the edge — again and again — until the unknown feels like home. The goal isn't to win. It's to keep becoming.
-
-#curiosity #growth #mindset #learning`;
-
-  const finalText = contentText
-    ? contentText.replace(/\r\n/g, "\n").split("\n")
-    : [];
+  const showFeaturedCommentStrip =
+    wireType === "comment" &&
+    !isUnderParent &&
+    Boolean(commentParentLabel) &&
+    typeof onPressCommentParent === "function";
 
   return (
     <ScrollView style={S.container} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={S.secondaryContainer}>
+        {showFeaturedCommentStrip ? (
+          <WireCommentParentStrip
+            label={commentParentLabel}
+            onPress={onPressCommentParent}
+          />
+        ) : null}
         <View style={S.metaSection}>
           <MenuChannelMeta
             channelLogo={channelLogo || DEFAULT_AVATAR}
@@ -101,20 +112,22 @@ Mastery isn't perfection; it's the relentless act of returning to the edge — a
             containerStyles={{ marginHorizontal: 0, marginVertical: 0 }}
             cardHeight={100}
             hideCardBorder={true}
+            onChannelPress={onChannelPress}
+            isSubscribed={isSubscribed}
+            canSubscribe={canSubscribe}
+            subscribePending={subscribePending}
+            onToggleSubscribe={onToggleSubscribe}
           />
         </View>
 
         <View style={S.content}>
-          {finalText.length > 0 && (
-            <Text style={S.mainText}>
-              {finalText.map((text, index) => (
-                <Text key={index}>
-                  {text.trim().replace(/\s+/g, " ")}
-                  {index < finalText.length - 1 ? "\n" : ""}
-                </Text>
-              ))}
-            </Text>
-          )}
+          <RichHtmlBlock
+            rawHtml={contentText}
+            fontSize={17}
+            lineHeight={26}
+            contentWidthOffset={56}
+            textColor="#fff"
+          />
         </View>
 
         <View style={S.interactionSection}>
@@ -124,6 +137,11 @@ Mastery isn't perfection; it's the relentless act of returning to the edge — a
             canDelete={isItMe}
             onDelete={onPressDeleteButton}
             onMenuPress={onMenuPress}
+            showCommentAction={false}
+            showRepostAction={false}
+            engagementManagedExternally={engagementManagedExternally}
+            userLiked={userLiked}
+            userDisliked={userDisliked}
             initialLiked={initialLiked}
             initialDisliked={initialDisliked}
             likesCount={likesCount}
@@ -131,8 +149,6 @@ Mastery isn't perfection; it's the relentless act of returning to the edge — a
             onLike={onLike}
             onDislike={onDislike}
             onShare={onShare}
-            onComment={onComment}
-            onRepost={onRepost}
             containerStyles={{ paddingVertical: 4 }}
           />
         </View>
@@ -192,20 +208,36 @@ Mastery isn't perfection; it's the relentless act of returning to the edge — a
         >
           Comments
         </Text>
-        <WireCardLayout
-          content={`Curiosity is the real engine of progress. You don't need certainty — you need movement. Every experiment, every failure, every weird idea you chase sharpens your understanding of reality. 
-
-Stop waiting to "figure it out" first. Dive in, break things, rebuild smarter. The mind grows through friction, not comfort. 
-
-Mastery isn't perfection; it's the relentless act of returning to the edge — again and again — until the unknown feels like home. The goal isn't to win. It's to keep becoming.
-
-#curiosity #growth #mindset #learning`}
-          channelLogo={DEFAULT_AVATAR}
-          userName="John Doe"
-          subscribersCount={100}
-          timeAgo="1 hour ago"
-          viewsText="100 views"
-        />
+        {commentItems.length === 0 ? (
+          <Text
+            style={{
+              color: "rgba(255,255,255,0.45)",
+              paddingHorizontal: 16,
+              paddingBottom: 24,
+            }}
+          >
+            No comments yet.
+          </Text>
+        ) : (
+          commentItems.map(row => (
+            <WireCardWithEngagement
+              key={row.key}
+              wire={row.wire}
+              channelLogo={row.channelLogo || DEFAULT_AVATAR}
+              userName={row.userName ?? "Unknown"}
+              subscribersCount={row.subscribersCount ?? 0}
+              timeAgo={row.timeAgo ?? ""}
+              viewsText={row.viewsText}
+              onPress={() => onPressCommentWire?.(row.wire)}
+              customCardStyles={{ borderRadius: 0 }}
+              compact={true}
+              isUnderParent={row.isUnderParent ?? true}
+              token={commentWireToken}
+              currentUserId={commentWireUserId}
+              WIRE_API_URL={commentWireApiUrl}
+            />
+          ))
+        )}
       </View>
     </ScrollView>
   );
