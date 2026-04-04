@@ -18,10 +18,12 @@
   },
   "peerDependencies": {
     "@expo/vector-icons": "*",
+    "@react-navigation/native": "*",
     "react": "*",
     "react-native": "*"
   },
   "dependencies": {
+    "@wereform/pkgm-api": "workspace:*",
     "@wereform/pkgm-channel": "workspace:*",
     "@wereform/pkgm-settings": "workspace:*",
     "@wereform/pkgm-shared": "workspace:*",
